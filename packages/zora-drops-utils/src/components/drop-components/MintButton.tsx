@@ -4,6 +4,7 @@ import { useDropsContractProvider } from './../../context'
 import { useAccount } from 'wagmi'
 
 interface MintButtonProps extends React.HTMLAttributes<HTMLElement> {
+  className?: string
   mintCta?: string
   presaleMintCta?: string
   presaleCannotMintCta?: string
@@ -45,6 +46,7 @@ export function MintButton({
     purchasePresale,
     onMintCallback,
     saleStatus,
+    isPresaleMint,
   } = useDropsContractProvider()
 
   const cannotMint = React.useMemo(
@@ -133,35 +135,26 @@ export function MintButton({
 
   return (
     <div className={`drops-ui__mint-button--component`} {...props}>
-      {!saleStatus?.saleIsActive && saleStatus?.presaleIsActive && (
-        <>
-          {accessAllowed ? (
-            <button
-              className={`
-                drops-ui__mint-button--button border-1 w-full border px-2 py-3
-                ${cannotMint ? 'drops-ui__mint-button--disabled pointer-events-none' : ''}
-              `}
-              onClick={handlePresaleMintCall}>
-              {!cannotMint ? (
-                <span className="drops-ui__mint-button--label">
-                  {presaleMintCtaCopy}
-                  <>{appendQuantity && quantity}</>
-                </span>
-              ) : (
-                <span className="drops-ui__mint-button--label drops-ui__mint-button--label-alert">
-                  {errors?.insufficientFunds ? insufficientFundsCta : ''}
-                  {balance?.walletLimit ? presaleMintCapCta : ''}
-                </span>
-              )}
-            </button>
+      {isPresaleMint ? (
+        <button
+          className={`
+            drops-ui__mint-button--button border-1 w-full border px-2 py-3
+            ${cannotMint ? 'drops-ui__mint-button--disabled pointer-events-none' : ''}
+          `}
+          onClick={handlePresaleMintCall}>
+          {!cannotMint ? (
+            <span className="drops-ui__mint-button--label">
+              {presaleMintCtaCopy}
+              <>{appendQuantity && quantity}</>
+            </span>
           ) : (
-            <span className="drops-ui__mint-button--presale-cannot-mint-cta">
-              {presaleCannotMintCtaCopy}
+            <span className="drops-ui__mint-button--label drops-ui__mint-button--label-alert">
+              {errors?.insufficientFunds ? insufficientFundsCta : ''}
+              {balance?.walletLimit ? presaleMintCapCta : ''}
             </span>
           )}
-        </>
-      )}
-      {saleStatus?.saleIsActive && !saleStatus?.presaleIsActive && (
+        </button>
+      ) : (
         <button
           onClick={handleMintCall}
           className={`

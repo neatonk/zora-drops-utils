@@ -1,3 +1,4 @@
+import type React from 'react'
 import type { ContractTransaction } from 'ethers'
 
 export type Networks = '1' | '5'
@@ -128,4 +129,5 @@ export interface DropsContractReturnTypes {
     allowlistEntry?: AllowListEntry
     accessAllowed?: boolean
   }
+  isPresaleMint?: boolean
 }

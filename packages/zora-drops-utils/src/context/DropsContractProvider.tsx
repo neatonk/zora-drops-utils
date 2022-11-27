@@ -43,6 +43,7 @@ export function DropsContractProvider({
   const [purchaseSuccess, setPurchaseSuccess] = React.useState(false)
   const [purchaseData, setPurchaseData] = React.useState<undefined | any>(undefined)
   const [mintQuantity, setMintQuantity] = React.useState(DEFAULT_MINT_QUANTITY)
+  const [isPresaleMint, setIsPresaleMint] = React.useState(false)
 
   const { address } = useAccount()
 
@@ -170,10 +171,10 @@ export function DropsContractProvider({
   }, [error])
 
   const maxPerAddress = React.useMemo(() => {
-    return saleStatus?.presaleIsActive && allowlistEntry
+    return isPresaleMint
       ? allowlistEntry?.maxCanMint
       : Number(collectionData?.salesConfig?.maxSalePurchasePerAddress) || 1
-  }, [collectionData, mintQuantity, saleStatus, allowlistEntry])
+  }, [isPresaleMint, allowlistEntry, collectionData])
 
   const purchaseLimit = React.useMemo(() => {
     return {
@@ -256,6 +257,23 @@ export function DropsContractProvider({
     isEnded,
   ])
 
+  React.useEffect(() => {
+    setIsPresaleMint(
+      allowlistEntry &&
+        accessAllowed &&
+        saleStatus?.presaleIsActive &&
+        balance?.walletBalance < allowlistEntry?.maxCanMint
+    )
+  }, [
+    allowlistEntry,
+    accessAllowed,
+    saleStatus,
+    saleStatus?.presaleIsActive,
+    balance,
+    balance?.walletBalance,
+    allowlistEntry?.maxCanMint,
+  ])
+
   return (
     <DropsContractContext.Provider
       value={{
@@ -297,6 +315,7 @@ export function DropsContractProvider({
           allowlistEntry,
           accessAllowed,
         },
+        isPresaleMint,
       }}>
       {children}
     </DropsContractContext.Provider>
