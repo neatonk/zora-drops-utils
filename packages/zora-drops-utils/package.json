@@ -1,6 +1,6 @@
 {
   "name": "@neatonk/zora-drops-utils",
-  "version": "0.1.62",
+  "version": "0.1.63-cc0lab.0",
   "description": "Example package with some web3 peer dependencies",
   "main": "dist/neatonk-zora-drops-utils.cjs.js",
   "module": "dist/neatonk-zora-drops-utils.esm.js",
@@ -8,7 +8,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/public-assembly/zora-drops-utils.git",
+    "url": "https://github.com/neatonk/zora-drops-utils.git",
     "directory": "packages/zora-drops-utils"
   },
   "files": [
